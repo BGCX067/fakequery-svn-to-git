@@ -1,0 +1,5 @@
+#summary Description of JsUnit
+
+JsUnit is a JavaScript testing framework.
+
+  * See http://jsunit.net/

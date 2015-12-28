@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+	<!-- Import JsUnit core test library -->
+    <script type="text/javascript" src="jsunit/app/jsUnitCore.js"></script>
+    
+    <!-- Import trialjs - JavaScript test helper library (see http://trialjs.googlecode.com/) -->
+    <script type="text/javascript" src="../lib/trial.js"></script>
+    
+    <!-- Import jQuery -->
+    <script type="text/javascript" src="../lib/jquery-1.3.1.js"></script>
+    
+    <!-- Import fake query source -->
+    <script type="text/javascript" src="../src/fake-query.src.js"></script>
+
+	<!-- Test scripts -->
+    <script type="text/javascript">
+
+		function test_argument_exists(){
+			assertNotUndefined("$$.argument should exist.", $$.argument);
+			assertEquals("$$.argument", $$.argument.toString());
+		}
+		
+		function test_function_exists(){
+			assertNotUndefined("$$.func should exist.", $$.func);
+			assertEquals("$$.func", $$.func.toString());
+		}
+		
+		function test_anything_exists(){
+			assertNotUndefined("$$.anything should exist", $$.anything);
+			assertEquals("$$.anything", $$.anything.toString());
+		}
+		
+		function test_equal_argument(){
+		
+			assertTrue($$.equal($("html").find(".something"), $("html").find($$.argument)));
+			
+			assertFalse($$.equal($("html").find(1,2,3), $("html").find($$.argument)));
+			assertFalse($$.equal($("html").find(1,2,3), $("html").find($$.argument, $$.argument)));
+			assertTrue($$.equal($("html").find(1,2,3), $("html").find($$.argument, $$.argument, $$.argument)));
+			
+		}
+		
+		function test_equal_function(){
+			assertTrue($$.equal($("html").each(function(){}), $("html").each($$.func)));
+		}
+		
+		function test_equal_anything(){
+		
+			assertTrue($$.equal($("html").find(), $("html").find($$.anything)));
+			assertTrue($$.equal($("html").find(1), $("html").find($$.anything)));
+			assertTrue($$.equal($("html").find(1,2), $("html").find($$.anything)));
+			assertTrue($$.equal($("html").find(1,2,3), $("html").find($$.anything)));
+						
+		}
+		
+		function test_equal_anything_with_calls_after(){
+		
+			assertFalse($$.equal($("html").find("anything").find("gibbon"), $("html").find($$.anything).find("monkey")));
+		
+		}
+    	
+    	function test_equal_anything_invalid_usage_throws(){
+    	
+    		assertTrue("Using $$.anything in an invalid format should throw an exception.", trial.doesThrow(function(){
+    	
+    			assertFalse($$.equal($("html").find("anything"), $("html").find($$.anything, "this_is_invalid")));
+    	
+    		}));
+    		
+    		assertTrue("Using $$.anything in an invalid format should throw an exception.", trial.doesThrow(function(){
+    	
+    			assertFalse($$.equal($("html").find("summit"), $("html").find("summit", $$.anything)));
+    	
+    		}));
+    	
+    	}
+
+    </script>
+    
+</head>
+</html>

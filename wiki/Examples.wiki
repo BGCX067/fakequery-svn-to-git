@@ -1,0 +1,3 @@
+#summary Get Started with fakeQuery
+
+  * [Example1] - Testing a simple piece of jQuery code

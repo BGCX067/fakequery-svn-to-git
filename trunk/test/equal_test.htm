@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+	<!-- Import JsUnit core test library -->
+    <script type="text/javascript" src="jsunit/app/jsUnitCore.js"></script>
+    
+    <!-- Import trialjs - JavaScript test helper library (see http://trialjs.googlecode.com/) -->
+    <script type="text/javascript" src="../lib/trial.js"></script>
+    
+    <!-- Import jQuery -->
+    <script type="text/javascript" src="../lib/jquery-1.3.1.js"></script>
+    
+    <!-- Import fake query source -->
+    <script type="text/javascript" src="../src/fake-query.src.js"></script>
+
+	<!-- Test scripts -->
+    <script type="text/javascript">
+
+    	function test_equal_simple_object(){
+    	
+    		assertFalse($$.equal(
+    			$("monkey"),
+    			$("wrong")
+    		));
+
+			assertTrue(
+		    		
+					$$.equal(
+						$$.createCallObject("method", ["arg1", "arg2"])
+					, 
+						$$.createCallObject("method", ["arg1", "arg2"])
+					)
+				);
+
+			
+				assertTrue(
+		    		
+					$$.equal(
+						$$.createCallObject("method", ["arg1", "arg2", "arg3"])
+					, 
+						$$.createCallObject("method", ["arg1", "arg2", "arg3"])
+					)
+				);
+				
+				assertFalse(
+						
+						$$.equal(
+							$$.createCallObject("method", ["arg1", "arg2", "arg3"])
+						, 
+							$$.createCallObject("method", ["arg1", "arg2"])
+						)
+					);
+
+				assertFalse(
+						
+						$$.equal(
+							$$.createCallObject("method", ["arg1", "arg2"])
+						, 
+							$$.createCallObject("method", ["arg1", "arg2", "arg3"])
+						)
+					);
+				
+				assertFalse(
+						
+						$$.equal(
+							$$.createCallObject("method", ["arg1", "arg2", "arg3"])
+						, 
+							$$.createCallObject("different_method", ["arg1", "arg2", "arg3"])
+						)
+					);
+
+    		
+    	}
+
+		function test_equal_throwErrors(){
+
+			assertTrue("Two call objects that do not match when 'true' passed in to 'throwErrors' should throw an exception but did not.", 
+					trial.doesThrow(function(){
+						
+						$$.equal(
+							{
+								name: "method",
+								arguments: ["arg1", "arg2"]
+							}
+						, 
+							{
+								name: "method",
+								arguments: ["arg1", "arg2", "arg3"]
+							}
+						, true
+						)
+						
+				}));
+
+			assertTrue("Two call objects that do not match when 'true' passed in to 'throwErrors' should throw an exception but did not.", 
+					trial.doesThrow(function(){
+						
+						$$.equal(
+							{
+								name: "method",
+								arguments: ["arg1", "arg2", "arg3"]
+							}
+						, 
+							{
+								name: "different_method",
+								arguments: ["arg1", "arg2", "arg3"]
+							}
+						, true
+						)
+						
+				}));
+
+
+			assertTrue("Two call objects that do not match when 'true' passed in to 'throwErrors' should throw an exception but did not.", 
+					trial.doesThrow(function(){
+						
+						$$.equal(
+							{
+								name: "method",
+								arguments: ["arg1", "arg2", "arg3"]
+							}
+						, 
+							{
+								name: "method",
+								arguments: ["arg1", "arg2"]
+							}
+						, true
+						)
+						
+				}));
+				
+		}
+
+		function test_equal_fakeQuery_objects(){
+
+			assertTrue($$.equal($("html"), $("html")));
+			assertTrue($$.equal($("html"), { name: "$", arguments: ["html"] }));
+			assertTrue($$.equal($("html").find(".something"), $("html").find(".something")));
+
+			assertTrue($$.equal(
+					$("html").find(".something"), 
+					[
+						{ name: "$", arguments: ["html"] },
+						{ name: "find", arguments: [".something"] }
+					]
+			));
+
+		}
+		
+		function test_equal_no_arguments(){
+		
+			assertTrue($$.equal( $("html").find(), $("html").find() ));
+			
+			assertFalse($$.equal( $("html").find(1), $("html").find() ));
+			assertFalse($$.equal( $("html").find(""), $("html").find() ));
+			assertFalse($$.equal( $("html").find({}), $("html").find() ));
+			assertFalse($$.equal( $("html").find(function(){}), $("html").find() ));
+		
+		}
+    	
+    	function test_equal_uneven_calls(){
+    	
+    		assertFalse($$.equal( $("html").find().find(), $("html").find() ));
+    		assertFalse($$.equal( $("html").find(), $("html").find().find() ));
+    	
+    	}
+    	
+    	function test_equal_2(){
+
+			assertTrue(
+    			$$.equal(
+    				$$.getCalls($("something").each(function(){})),
+    				$($$.anything).each($$.anything),
+    				true
+    			)
+    		);
+    	
+    	}
+    	
+    </script>
+    
+</head>
+</html>

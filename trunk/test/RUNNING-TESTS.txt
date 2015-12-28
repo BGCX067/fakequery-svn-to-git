@@ -1,0 +1,3 @@
+Open this file in your browser:
+
+file:///C:/dev/work/fakeQuery/test/jsunit/testRunner.html?testpage=C:/dev/work/fakeQuery/test/all.htm&autorun=true

@@ -1,0 +1,11 @@
+#summary Description of wasCalledOn method
+
+= `wasCalledOn` =
+
+Checks to see if a certain method was called on a specific item.
+
+{{{
+$$.wasCalledOn( (string) itemName, (string) methodName [, (object) argument [ , (object) argument [, . . .]]] );
+}}}
+
+(New in v0.2)

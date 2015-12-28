@@ -1,0 +1,41 @@
+#summary Description of $$.when
+
+= {{{$$.when}}} =
+
+Adds callbacks that get run when specific calls are being made.
+
+== Usage ==
+
+{{{
+$$.when( (Object) calls, (Function) callback );
+}}}
+
+|| {{{(Object) calls}}} || The calls to specifically handle ||
+|| {{{(Function) callback}}} || The callback function to call when the specified calls have been called ||
+
+== Example ==
+
+Consider this function:
+
+{{{
+function doSomething(){
+   $("a").each(function(){ 
+      $(this).css("text-decoration", "underline")
+   });
+}
+}}}
+
+Since the function that sets the {{{css}}} value is anonymous (and therefore inaccessible by any code outside the {{{doSomething}}} function) we need a use {{{$$.when}}}.
+
+{{{
+$$.when(
+   $($$.anything).each($$.anything),
+   function(c){
+
+      // this callback will replace the "each" method
+      // c - The callback method passed to the "each" method
+   
+  
+   }
+);
+}}}

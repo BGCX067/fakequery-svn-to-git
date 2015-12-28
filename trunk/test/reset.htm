@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+	<!-- Import JsUnit core test library -->
+    <script type="text/javascript" src="jsunit/app/jsUnitCore.js"></script>
+    
+    <!-- Import trialjs - JavaScript test helper library (see http://trialjs.googlecode.com/) -->
+    <script type="text/javascript" src="../lib/trial.js"></script>
+    
+    <!-- Import jQuery -->
+    <script type="text/javascript" src="../lib/jquery-1.3.1.js"></script>
+    
+    <!-- Import fake query source -->
+    <script type="text/javascript" src="../src/fake-query.src.js"></script>
+
+	<!-- Test scripts -->
+    <script type="text/javascript">
+
+		function test_reset_calls(){
+
+			$$.calls = [{},{},{}];
+			$$.record = false;
+			$$.lastCallTo = { addClass: {} };
+			$$.callsTo = { addClass: 1 };
+			$$.whenCallbacks = [{},{},{}];
+
+			assertEquals(3, $$.calls.length);
+			assertFalse($$.record);
+			assertNotUndefined("$$.lastCallTo.addClass", $$.lastCallTo.addClass);
+			assertNotUndefined("$$.lastCallTo.addClass", $$.callsTo.addClass);
+			assertEquals(3, $$.whenCallbacks.length);
+			
+			$$.reset();
+
+			assertEquals(0, $$.calls.length);
+			assertTrue("Recording should be switched back on by $$.reset.", $$.record);
+			assertUndefined("$$.lastCallTo.addClass", $$.lastCallTo.addClass);
+			assertUndefined("$$.callsTo.addClass", $$.callsTo.addClass);
+			assertEquals("$$.whenCallbacks was not set back to an empty array by $$.reset", 0, $$.whenCallbacks.length);
+			
+		}
+		
+    </script>
+    
+</head>
+</html>

@@ -1,0 +1,17 @@
+#summary Description of getCallCount method
+
+= {{{getCallCount}}} =
+
+getCallCount gets the number of times a call was made to the specified function name.
+
+== Usage ==
+
+{{{
+(Number) $$.getCallCount( (String) functionName )
+}}}
+
+== {{{$$.getCallCount}}} vs {{{$$.callsTo.function.length}}} ==
+
+Another way to access the number of times a function was called is to directly access the array for that function inside {{{$$.callsTo}}}.  But if a function is never called, the the array will never get created so you will end up trying to access the {{{length}}} property of an undefined object.
+
+{{{$$.getCallCount}}} wraps this up for you and if no object exists, safely returns {{{0}}}.

@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+	<!-- Import JsUnit core test library -->
+    <script type="text/javascript" src="jsunit/app/jsUnitCore.js"></script>
+    
+    <!-- Import trialjs - JavaScript test helper library (see http://trialjs.googlecode.com/) -->
+    <script type="text/javascript" src="../lib/trial.js"></script>
+    
+    <!-- Import jQuery -->
+    <script type="text/javascript" src="../lib/jquery-1.3.1.js"></script>
+    
+    <!-- Import fake query source -->
+    <script type="text/javascript" src="../src/fake-query.src.js"></script>
+
+	<!-- Test scripts -->
+    <script type="text/javascript">
+
+    	function test_addStaticMethod(){
+
+        	$$.reset();
+
+			assertUndefined("$.", $.made_up_method);
+
+			$$.addStaticMethod("made_up_method");
+			
+			assertNotUndefined("$.", $.made_up_method);
+			assertEquals("typeof static method should be function", "function", typeof $.made_up_method);
+
+			// ensure the default return object of a call is the
+			// $ object itself
+			var result = $.made_up_method("arg1", "arg2");
+			assertEquals($, result);
+
+			// ensure the call was logged
+			assertEquals(1, $$.calls.length);
+			assertEquals("made_up_method", $$.calls[0].name);
+			assertEquals("arg1", $$.calls[0].arguments[0]);
+			assertEquals("arg2", $$.calls[0].arguments[1]);
+			
+    	}
+
+		function test_addInstanceMethod(){
+
+			$$.reset();
+
+			var instance = $("selector");
+			assertUndefined(instance.made_up_method);
+
+			$$.addInstanceMethod(instance, "made_up_method");
+
+			assertNotUndefined("addInstanceMethod didn't add the instance method.", instance.made_up_method);
+
+			// ensure the return type for the method IS the
+			// instance
+			var result = instance.made_up_method("arg1", "arg2");
+			assertEquals(instance, result);
+
+			// ensure the call was logged
+			assertEquals("Global $$.calls didn't get the message.", 2, $$.calls.length);
+			assertEquals("made_up_method", $$.calls[1].name);
+			assertEquals("arg1", $$.calls[1].arguments[0]);
+			assertEquals("arg2", $$.calls[1].arguments[1]);
+
+			// ... and in the instance too
+			assertEquals("Instance.$$.calls didn't get the message.", 2, instance.$$.calls.length);
+			assertEquals("made_up_method", instance.$$.calls[1].name);
+			assertEquals("arg1", instance.$$.calls[1].arguments[0]);
+			assertEquals("arg2", instance.$$.calls[1].arguments[1]);
+			
+		}
+    	
+    </script>
+    
+</head>
+</html>

@@ -1,0 +1,23 @@
+#summary fakeQuery API
+
+  * [EqualMethod $$.equal] - Tests whether calls match
+  * [GetCallCount $$.getCallCount] - Gets the number of times a function was called since the last [ResetMethod $$.reset].
+  * [ResetMethod $$.reset] - Resets fakeQuery
+  * [wasCalled $$.wasCalled] - Tests whether specific calls have been made or not
+  * [wasCalledOn $$.wasCalledOn] - Tests whether specific calls were made on a specific object.
+  * [WhenMethod $$.when] - Configures specific implementations of jQuery calls
+
+== Want to contribute? ==
+
+Can you help with:
+
+  * Ideas
+  * Feedback
+  * Issues
+  * Bug fixes
+  * Feature enhancements
+  * Suggestions
+  * Examples
+  * jQuery scripts that are difficult to test so that we can push fakequery to its limit
+
+If so, please email us at `fakequery at me dot com`

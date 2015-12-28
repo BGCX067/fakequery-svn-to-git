@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+	<!-- Import JsUnit core test library -->
+    <script type="text/javascript" src="jsunit/app/jsUnitCore.js"></script>
+    
+    <!-- Import trialjs - JavaScript test helper library (see http://trialjs.googlecode.com/) -->
+    <script type="text/javascript" src="../lib/trial.js"></script>
+    
+    <!-- Import jQuery -->
+    <script type="text/javascript" src="../lib/jquery-1.3.1.js"></script>
+    
+    <!-- Import fake query source -->
+    <script type="text/javascript" src="../src/fake-query.src.js"></script>
+
+	<!-- Test scripts -->
+    <script type="text/javascript">
+
+		function test_when_gets_stored(){
+		
+			$$.reset();
+		
+			assertNotUndefined("$$.when", $$.when);
+		
+			var callback = function(){
+			    return this;
+			};
+		
+			var whenObject = $$.when(
+				$($$.anything).each($$.anything),
+				callback
+			);
+			
+			assertNotUndefined("$$.whenCallbacks", $$.whenCallbacks);
+			assertEquals(1, $$.whenCallbacks.length);
+			assertNotUndefined("$$.whenCallbacks[0].calls", $$.whenCallbacks[0].calls);
+			assertNotUndefined("$$.whenCallbacks[0].callback", $$.whenCallbacks[0].callback);
+			
+			assertEquals("The object returned by $$.when should be a reference to the when item itself.", $$.whenCallbacks[0], whenObject);
+			
+			assertEquals(callback, $$.whenCallbacks[0].callback);
+			
+			assertTrue( $$.equal( $($$.anything).each($$.anything), $$.whenCallbacks[0].calls) );
+				
+		}
+		
+		function test_when_uses_getCalls(){
+		
+			$$.reset();
+			
+			var whenObject = $$.when(
+				{ name: "this", arguments: ["that"] },
+				function(){},
+				{}
+			);
+			
+			assertEquals("this", $$.whenCallbacks[0].calls[0].name);
+			assertEquals("that", $$.whenCallbacks[0].calls[0].arguments[0]);
+		
+		}
+		
+		function test_options() {
+		
+			$$.reset();
+			
+			var options = {
+				one: true,
+				two: false,
+				three: true
+			};
+			
+			var whenObject = $$.when(
+				$($$.anything).each($$.anything),
+				function(){},
+				options
+			);
+		
+			assertNotUndefined("$$.whenCallbacks[0].options", $$.whenCallbacks[0].options);
+			assertEquals(true, $$.whenCallbacks[0].options.one);
+			assertEquals(false, $$.whenCallbacks[0].options.two);
+			assertEquals(true, $$.whenCallbacks[0].options.three);
+			
+		}
+		
+		function test_get_matching_when(){
+		
+			$$.reset();
+		
+			assertNotUndefined("$$.getMatchingWhen", $$.getMatchingWhen);
+		
+			$$.stopRecording();
+		
+			var whenObject = $$.when(
+				$($$.anything).each($$.anything),
+				function(c){
+				}
+			);
+			
+			$$.startRecording();
+			
+			assertNull("When no 'whenCallbacks' match, getMatchingWhen() should return null.", $$.getMatchingWhen());
+		
+			$("something");
+			
+			assertNull("When no 'whenCallbacks' match, getMatchingWhen() should return null.", $$.getMatchingWhen());
+		
+			$("something").each(function(){});
+			
+			assertNotNull("When a 'whenCallbacks' matches, getMatchingWhen() shouldn't return null.", $$.getMatchingWhen());
+			assertEquals(whenObject, $$.getMatchingWhen());
+		
+		}
+		
+		function test_when_returns_reference_to_when_object(){
+		
+			$$.reset();
+		
+			var when = $$.when(
+				$($$.anything).each($$.anything),
+				function(c){
+					callbackArgumentPassedToWhenCallback = c;
+				}
+			);
+			
+			assertNotNull("result of $$.when", when);
+			assertEquals("The object returned by $$.when should be a reference to the when item itself.", when, $$.whenCallbacks[0]);
+			
+			assertNotUndefined("when.usedCount", when.usedCount);
+			assertEquals(0, when.usedCount);
+		
+			// make it get called
+			$(".something").each(function(){});
+			
+			assertEquals(1, when.usedCount);
+		
+		}
+		
+		function test_when_gets_called(){
+		
+			$$.reset();
+		
+			var callbackArgumentPassedToWhenCallback = null;
+		
+			$$.when(
+				$($$.anything).each($$.anything),
+				function(c){
+					callbackArgumentPassedToWhenCallback = c;
+				}
+			);
+			
+			var eachFunction = function(){};
+			$(".something").each(eachFunction);
+			
+			assertEquals(eachFunction, callbackArgumentPassedToWhenCallback);
+		
+		}
+		
+		function test_when_works_on_static_methods(){
+		
+			$$.reset();
+
+			$$.stopRecording();
+			
+			var optionsCaptured = null;
+			var optionsPassed = {};
+			
+			$$.when(
+				$.ajax($$.anything),
+				function(options){
+					optionsCaptured = options;
+					return this;
+				}
+			);
+			
+			$$.startRecording();
+			
+			assertEquals($, $.ajax(optionsPassed));
+			
+			assertEquals(optionsPassed, optionsCaptured);
+			
+		}
+
+    </script>
+    
+</head>
+</html>

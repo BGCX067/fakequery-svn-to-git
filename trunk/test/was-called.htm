@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+	<!-- Import JsUnit core test library -->
+    <script type="text/javascript" src="jsunit/app/jsUnitCore.js"></script>
+    
+    <!-- Import trialjs - JavaScript test helper library (see http://trialjs.googlecode.com/) -->
+    <script type="text/javascript" src="../lib/trial.js"></script>
+    
+    <!-- Import jQuery -->
+    <script type="text/javascript" src="../lib/jquery-1.3.1.js"></script>
+    
+    <!-- Import fake query source -->
+    <script type="text/javascript" src="../src/fake-query.src.js"></script>
+
+	<!-- Test scripts -->
+    <script type="text/javascript">
+
+		function test_wasCalled_flexible(){
+		
+			$$.reset();
+			
+			// run some jQuery code
+			var anEachFunction = function(){};
+			
+			// some extra stuff
+			$("monkey").attr("k", "v");
+			
+			// do the code being tested
+			$("li").find("p.highlight").each(anEachFunction);
+			
+			// some extra stuff
+			$("gibbon").attr("k", "v");
+			
+			$$.stopRecording();
+			
+			// make some assertions
+			assertTrue( "1", $$.wasCalled($("li")) );
+			assertTrue( "2", $$.wasCalled($($$.anything).find($$.anything)) );
+			assertTrue( "3", $$.wasCalled($("li").find($$.anything)) );
+			assertTrue( "4", $$.wasCalled($("li").find("p.highlight")) );
+			assertTrue( "5", $$.wasCalled($("li").find("p.highlight").each($$.func)) );
+			assertTrue( "6", $$.wasCalled($("li").find("p.highlight").each(anEachFunction)) );
+
+			assertFalse( "1", $$.wasCalled($("wrong")) );
+			assertFalse( "2", $$.wasCalled($("li").find("wrong")) );
+			assertFalse( "3", $$.wasCalled($("li").find("wrong").each($$.func)) );
+
+		}
+		
+		function test_wasCalled_multipleInstances(){
+		
+			$$.reset();
+			
+			$(".simon").find(".howard");
+			$(".mat").find(".ryer");
+			
+			$$.stopRecording();
+			
+			assertTrue( "1", $$.wasCalled( $(".simon").find(".howard") ) );
+			assertTrue( "2", $$.wasCalled( $(".mat").find(".ryer") ) );
+		
+		}
+		
+		
+
+    </script>
+    
+</head>
+</html>

@@ -1,0 +1,59 @@
+#summary Description for the $$.wasCalled() method
+
+= {{{$$.wasCalled}}} =
+
+Checks the global log to see if a series of calls were made or not.
+
+== Usage ==
+
+{{{
+(Boolean) $$.wasCalled( (Object) calls, (Boolean) strict, (Boolean) throwErrors )
+}}}
+
+|| Returns || Returns a {{{Boolean}}} describing whether the specified calls have been made or not. ||
+||{{{(Object) calls}}}||The calls to check for||
+||{{{(Boolean) strict}}}||Whether to be strict or not.||
+||{{{(Boolean) throwErrors}}}||Whether to throw errors describing where things did not match or not.||
+
+=== {{{calls}}} ===
+
+The calls can either be a single [CallObject  call object], an array of [CallObject calls] or a Fake jQuery object containing [CallObject calls].
+
+{{{
+// individual call object
+$$.wasCalled( calls[i] );
+
+// call array
+$$.wasCalled( calls );
+
+// fake jQuery object
+$$.wasCalled( $("a").find("p") );
+}}}
+
+=== {{{Strict}}} ===
+
+If true, means that the calls being tested for should appear at the beginning of the log (i.e. at index {{{0}}}) with _no other calls_ before them.
+
+=== {{{throwErrors}}} ===
+
+Whether or not to throw meaningful errors if the calls were not found.
+
+== Example ==
+
+{{{
+
+// the code to test
+$("ul").find("li");
+$("a.special").css("text-decoration", "underline");
+
+
+$$.wasCalled($("ul").find("li"));
+// returns true
+
+$$.wasCalled($("a.special").css("text-decoration", "underline"));
+// returns true
+
+$$.wasCalled($("a.special").css("text-decoration", "underline"), true);
+// returns false because it is strict
+
+}}}

@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+	<!-- Import JsUnit core test library -->
+    <script type="text/javascript" src="jsunit/app/jsUnitCore.js"></script>
+    
+    <!-- Import trialjs - JavaScript test helper library (see http://trialjs.googlecode.com/) -->
+    <script type="text/javascript" src="../lib/trial.js"></script>
+    
+    <!-- Import jQuery -->
+    <script type="text/javascript" src="../lib/jquery-1.3.1.js"></script>
+    
+    <!-- Import fake query source -->
+    <script type="text/javascript" src="../src/fake-query.src.js"></script>
+
+	<!-- Test scripts -->
+    <script type="text/javascript">
+
+		function test_last_call_to(){
+		
+			$$.reset();
+			
+			$("html").addClass("simon").show();
+			
+			assertEquals("simon", $$.lastCallTo.addClass.argument);
+			assertEquals(0, $$.lastCallTo.show.arguments.length);
+			
+		}
+		
+		function test_call_count() {
+		
+			$$.reset();
+			
+			$("html").addClass("simon").addClass("howard").show();
+			
+			assertEquals(2, $$.callsTo.addClass.length);
+			assertEquals(1, $$.callsTo.show.length);
+			
+		}
+
+		function test_getCallCount(){
+
+			$$.reset();
+			
+			$("html").addClass("simon").addClass("howard").show();
+			
+			assertEquals(2, $$.getCallCount("addClass"));
+			assertEquals(1, $$.getCallCount("show"));
+			assertEquals(0, $$.getCallCount("hide"));
+			
+		}
+
+    </script>
+    
+</head>
+</html>

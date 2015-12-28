@@ -1,0 +1,11 @@
+#summary Description of $$.equal
+
+= {{{$$.equal}}} =
+
+Compares two objects to to see if the calls (array of [CallObject CallObjects]) match.  Optionally throws a detailed error if they do not match.
+
+== Usage ==
+
+{{{
+(Boolean) $$.equal( (Object) a, (Object) b [, throwErrors] );
+}}}

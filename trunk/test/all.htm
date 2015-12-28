@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <script type="text/javascript" src="jsunit/app/jsUnitCore.js"></script>
+    <script type="text/javascript" src="jsunit/app/jsUnitTestSuite.js"></script>
+    
+    <script type="text/javascript">
+    
+        function allSuite()
+        {
+    
+            var s = new top.jsUnitTestSuite();
+            
+            s.addTestPage("../when-tests.htm");
+            s.addTestPage("../last-call-tests.htm");
+            s.addTestPage("../was-called.htm");
+            s.addTestPage("../common-methods.htm");
+            s.addTestPage("../jquery-discovery.htm");
+            s.addTestPage("../save-call.htm");
+            s.addTestPage("../reset.htm");
+			s.addTestPage("../actual-fake-jquery-tests.htm");
+			s.addTestPage("../methods-that-log-tests.htm");
+			s.addTestPage("../equal_test.htm");
+			s.addTestPage("../general-call-logging.htm");
+            s.addTestPage("../placeholder-objects.htm");
+            s.addTestPage("../wasCalledOn.htm");
+            
+            return s;
+        
+        }
+        
+        function suite() {
+        
+            var newsuite = new top.jsUnitTestSuite();
+            newsuite.addTestSuite(allSuite());
+            return newsuite;
+        
+        }
+    
+    </script>
+</head>
+<body>
+</body>
+</html>

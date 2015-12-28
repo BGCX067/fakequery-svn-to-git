@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+	<!-- Import JsUnit core test library -->
+    <script type="text/javascript" src="jsunit/app/jsUnitCore.js"></script>
+    
+    <!-- Import trialjs - JavaScript test helper library (see http://trialjs.googlecode.com/) -->
+    <script type="text/javascript" src="../lib/trial.js"></script>
+    
+    <!-- Import jQuery -->
+    <script type="text/javascript" src="../lib/jquery-1.3.1.js"></script>
+    
+    <!-- Import fake query source -->
+    <script type="text/javascript" src="../src/fake-query.src.js"></script>
+
+	<!-- Test scripts -->
+    <script type="text/javascript">
+
+		function test_stuff_exists(){
+
+			assertNotUndefined("$$.fakeQueryObject.fn should be the jQuery instance template.", $$.fakeQueryObject.fn);
+			assertNotUndefined("$$.fakeQueryObject.fn.init should be the jQuery instance constructor.", $$.fakeQueryObject.fn.init);
+			
+		}
+    
+		function test_$$_exists(){
+
+			assertNotUndefined("$$", $$);
+			assertNotNull("$$", $$);
+			
+		}
+
+		function test_$$_args(){
+
+			var args = $$.args(function(one, two, three){});
+
+			assertEquals(3, args.length);
+			assertEquals("one", 	args[0]);
+			assertEquals("two", 	args[1]);
+			assertEquals("three", 	args[2]);
+			
+		}
+
+		function test_$$_strip(){
+
+			assertEquals("Testing is great", $$.strip("    Testing is great     "));
+			assertEquals("Testing is great", $$.strip("Testing is great"));
+			
+		}
+
+		function test_createCallObject(){
+
+			var obj = $$.createCallObject("test", ["one", "two", "three"]);
+
+			assertNotNull("Return of $$.createCallObject should not be null.", obj);
+
+			assertEquals("test", obj.name);
+			assertEquals("one", obj.arguments[0]);
+			assertEquals("two", obj.arguments[1]);
+			assertEquals("three", obj.arguments[2]);
+			
+			assertEquals("The first argument should be stored in .argument as well as in the arguments array.", "one", obj.argument);
+
+			assertEquals("test(one, two, three)", obj.toString());
+			
+		}
+
+		function test_creatingFakeQueryObject_adds_$_call_log(){
+
+			var a = $("html");
+
+			assertNotUndefined("a.$$", a.$$);
+			assertNotUndefined("a.$$.calls", a.$$.calls);
+			assertEquals(1, a.$$.calls.length);
+
+			assertEquals("$", a.$$.calls[0].name);
+			assertEquals("html", a.$$.calls[0].arguments[0]);
+
+		}
+
+		function test_getCalls(){
+
+			var callsArray = [{},{},{}];
+			
+			assertEquals("$$.getCalls when passed an array should return an array with the same number of items.",
+					callsArray.length, $$.getCalls(callsArray).length);
+
+			assertEquals("$$.getCalls when passed an instance should return the items from the obj.$$.calls array.",
+					callsArray.length, $$.getCalls( { $$: { calls: callsArray } } ).length);
+
+			assertNotNull("$$.getCalls when passed an instance method with no obj.$$.calls array should return empty array.",
+					$$.getCalls( { $$: { calls: null } } ));
+
+			assertEquals("Passing multiple arrays to the $$.getCalls method should concatinate them all.",
+					6, $$.getCalls(callsArray, callsArray).length);
+
+			assertEquals("Passing a single call object should return the call object in an array.",
+					1, $$.getCalls({ name: "method", arguments: [] }).length);
+
+			assertEquals("Passing a single call object should return the call object in an array.",
+					"method", $$.getCalls({ name: "method", arguments: [] })[0].name);
+
+			assertEquals(
+				1, $$.getCalls($("html")).length
+			);
+			
+            $$.reset();	
+	        assertEquals(1,
+	            $$.getCalls($.ajax($$.anything)).length);
+			
+		}
+		
+		function test_indexOf(){
+		
+			$$.reset();
+			
+			$("html").find(".one").find(".two");
+			$("html").find(".three").find("four");
+			var instance = $("html").find("FIVE").find("six");
+			
+			$$.stopRecording();
+			
+			assertEquals("1", 0, $$.indexOf($$.createCallObject("$", ["html"])));
+			assertEquals("2", 2, $$.indexOf($$.createCallObject("find", [".two"])));
+			assertEquals("3", 5, $$.indexOf($$.createCallObject("find", ["four"])));
+			assertEquals("4", 7, $$.indexOf($$.createCallObject("find", ["FIVE"])));
+
+			// test startIndex
+			assertEquals("5", 3, $$.indexOf($$.createCallObject("$", ["html"]), null, 1));
+			assertEquals("6", 3, $$.indexOf($$.createCallObject("$", ["html"]), null, 2));
+			assertEquals("7", 3, $$.indexOf($$.createCallObject("$", ["html"]), null, 3));
+			assertEquals("8", 6, $$.indexOf($$.createCallObject("$", ["html"]), null, 4));
+			
+			// test specific instance
+			assertEquals("9", 1, $$.indexOf($$.createCallObject("find", ["FIVE"]), instance));
+			
+			
+			// test an array of calls (instead of just one)
+			assertEquals("10", 0, $$.indexOf( $($$.anything).find(".one").find(".two") ));
+			assertEquals("10", 3, $$.indexOf( $($$.anything).find(".three").find("four") ));
+
+		}
+		
+		function test_indexOf_2(){
+		
+			$$.reset();
+			
+			$("something");
+			$("something").each(function(){});
+			
+			$$.stopRecording();
+			
+			assertEquals(1, $$.indexOf( $($$.anything).each($$.anything) ));
+		
+		}
+				
+		function test_stop_start_recording(){
+		
+			$$.reset();
+			
+			assertTrue($$.record)
+		
+			$(".something").find(".something_else");
+			
+			assertEquals(2, $$.calls.length);
+			
+			$$.stopRecording();
+			assertFalse($$.record);
+			
+			$(".something").find(".something_else");
+			assertEquals(2, $$.calls.length);
+			
+			$$.startRecording();
+			assertTrue($$.record);
+			
+			$(".something").find(".something_else");
+			assertEquals(4, $$.calls.length);
+		
+		}
+		
+		function test_static_returns_static(){
+		
+		  assertEquals($, $.ajax());
+		  assertEquals(1, $.$$.calls.length);
+		  assertEquals(2, $.ajax($$.anything).$$.calls.length);
+		
+		}
+		
+		function test_debug(){
+		
+		  $$.reset();
+		  
+		  $("something").find("something-else");
+		  
+		  var debugText = $$.debug();
+		  
+		  assertFalse("$$.debug thinks there are no calls when there are",
+		      trial.contains(debugText, "No calls")
+		  );
+		  
+		}
+
+    </script>
+    
+</head>
+</html>

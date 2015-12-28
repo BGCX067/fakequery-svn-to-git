@@ -1,0 +1,14 @@
+#summary Description on how to install FakeQuery in your test pages.
+
+= Installing FakeQuery =
+
+In order for FakeQuery to properly act like jQuery, it requires jQuery to be included in the test pages.  The jQuery script should be included _before_ the fake query script.
+
+{{{
+<script type="text/javascript" src="jquery-1.3.1.js"></script>
+<script type="text/javascript" src="fakequery.js"></script>
+}}}
+
+== Using jQuery Plugins with FakeQuery ==
+
+FakeQuery will automatically support any plugins you include in the page provided that they are included _before_ the fake query script.

@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+	<!-- Import JsUnit core test library -->
+    <script type="text/javascript" src="jsunit/app/jsUnitCore.js"></script>
+    
+    <!-- Import trialjs - JavaScript test helper library (see http://trialjs.googlecode.com/) -->
+    <script type="text/javascript" src="../lib/trial.js"></script>
+    
+    <!-- Import jQuery -->
+    <script type="text/javascript" src="../lib/jquery-1.3.1.js"></script>
+    
+    <!-- Import fake query source -->
+    <script type="text/javascript" src="../src/fake-query.src.js"></script>
+
+	<!-- Test scripts -->
+    <script type="text/javascript">
+
+		function test_instance(){
+
+			var obj = $("selector");
+
+			assertNotUndefined("obj", obj);
+
+			// make sure this object is NOT jQuery
+			assertNotUndefined("It looks like $ is not returning a fakeQuery object. (obj.$$ == undefined)", obj.$$);
+			assertEquals("fakeQuery", obj.$$.type);
+
+			var obj2 = jQuery("selector");
+
+			assertNotUndefined("obj2", obj2);
+
+			// make sure this object is NOT jQuery
+			assertNotUndefined("It looks like jQuery() is not returning a fakeQuery object. (obj.$$ == undefined)", obj2.$$);
+			assertEquals("fakeQuery", obj2.$$.type);
+			
+		}
+		
+    </script>
+    
+</head>
+</html>

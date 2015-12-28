@@ -1,0 +1,37 @@
+#summary Description of $$.reset
+
+= {{{ $$.reset }}} =
+
+{{{$$.reset()}}} removes all call log data and resets fake query back to its original state.  Usually this should be called before each test in order to clear away data left over from previous tests.
+
+== Usage ==
+
+{{{
+$$.reset();
+}}}
+
+== Example ==
+
+{{{
+// make a call
+$(".something");
+
+// there should be one call in the log
+assertEquals(1, $$.calls.length);
+
+// reset fakeQuery
+$$.reset();
+
+// now the logs will be cleared out
+assertEquals(0, $$.calls.length);
+
+}}}
+
+== What gets reset by {{{$$.reset}}}? ==
+
+  * Calls - {{{$$.calls}}}
+  * Static calls - {{{$.$$.calls}}}
+  * Last call details - {{{$$.lastCallTo.x}}}
+  * Call counters - {{{$$.callsTo.x}}}
+  * Specific method implementations - Data for {{{$$.when}}} methods.
+  * Starts recording again if {{{$$.stopRecording()}}} has been called.

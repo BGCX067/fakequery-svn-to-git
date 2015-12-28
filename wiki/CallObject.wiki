@@ -1,0 +1,16 @@
+#summary Description of the CallObject
+
+= `CallObject` =
+
+The `CallObject` is a object that describes an individual call that was made to jQuery.  It is the object that is stored in the following places:
+
+  * the `$$.calls` array
+  * the `$$.lastCallTo.function` array
+
+== Properties ==
+
+|| *Property* || *Description* || *Example* ||
+||(String) `name`||The name of the method that was called||'addClass'||
+||(Object) `argument`||Useful shortcut containing the single argument that was passed to the method.  If more than one argument was passed, `argument` will be `null` and you should use `arguments` instead.||'ohmy'||
+||(Array) `arguments`||The array of arguments passed to the method call.  If only one method was passed, `arguments` still contains that argument.||`['ohmy', 'highlight']`||
+||(Boolean) `isConstructor`||Whether this call was a call to the fakeQuery object constructor.  I.e. was it a call to {{{$()}}} (`true`) or was it a call to an existing instance.||`true` or `false`||

@@ -1,0 +1,50 @@
+#summary Example of how fakeQuery works
+
+= fakeQuery Example =
+
+== jQuery code ==
+
+The following jQuery code has been taken from the [http://jquery.com jQuery homepage].
+
+{{{
+function doSomething(){
+   $("p.neat").addClass("ohmy").show("slow");
+}
+}}}
+
+== The different ways to test this ==
+
+The tests in this example are written in JsUnit format, you can easily adapt for different frameworks.
+
+{{{
+
+// start with a fresh fakeQuery
+$$.reset();
+
+// call the code to be tested
+doSomething();
+
+// stop recording calls now
+$$.stopRecording();
+
+// assert that show("slow") was called on the "p.neat" elements
+assertTrue( $$.wasCalledOn("p.neat", "show", "slow") );
+
+// Explicitly assert that calls were made:
+assertTrue( $$.wasCalled($("p.neat")) );
+assertTrue( $$.wasCalled($("p.neat").addClass("ohmy")) );
+assertTrue( $$.wasCalled($("p.neat").addClass("ohmy").show("slow")) );
+
+// Find the addClass call and make sure the first argument was "ohmy"
+assertEquals( "ohmy", $$.lastCallTo.addClass.argument );
+
+// Make sure that addClass was only called once
+assertEquals(1, $$.getCallCount("addClass"));
+
+// Make sure the show method was called once
+assertEquals(1, $$.getCallCount("show"));
+
+// Make sure the hide method was not called
+assertEquals(0, $$.getCallCount("hide"));
+
+}}}

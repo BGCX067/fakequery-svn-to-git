@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+	<!-- Import JsUnit core test library -->
+    <script type="text/javascript" src="jsunit/app/jsUnitCore.js"></script>
+    
+    <!-- Import trialjs - JavaScript test helper library (see http://trialjs.googlecode.com/) -->
+    <script type="text/javascript" src="../lib/trial.js"></script>
+    
+    <!-- Import jQuery -->
+    <script type="text/javascript" src="../lib/jquery-1.3.1.js"></script>
+    
+    <!-- Import fake query source -->
+    <script type="text/javascript" src="../src/fake-query.src.js"></script>
+
+	<!-- Test scripts -->
+    <script type="text/javascript">
+    
+    	function test_items_areRecorded(){
+    	
+    		var s = $("something");
+    		
+    		assertNotNull($$.instances["something"]);
+    		assertNotUndefined($$.instances["something"]);
+    		
+    		// make some calls on s
+    		s.bind("click", function(){});
+    		
+    		assertEquals("bind", $$.instances["something"].$$.calls[1].name);
+    		assertEquals("click", $$.instances["something"].$$.calls[1].argument);
+    		assertEquals("click", $$.instances["something"].$$.calls[1].arguments[0]);
+    		
+    	}
+
+		function test_wasCalledOn(){
+		
+			$$.reset();
+		
+			var s = $("#simon");
+			
+			s.bind("click", function(){});
+			
+			assertTrue($$.wasCalledOn("#simon", "bind", "click", $$.func));
+				
+		}
+		
+		function test_resetWorks(){
+		
+			$$.reset();
+			
+			var s = $("#simon");
+			s.bind("click", function(){});
+		
+			assertEquals(2, $$.instances["#simon"].$$.calls.length);
+		
+			$$.reset();
+			
+			assertUndefined($$.instances["#simon"]);
+		
+		}
+
+    </script>
+    
+</head>
+</html>
